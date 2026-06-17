@@ -1,3 +1,10 @@
+/*
+ * Author: Srikar Akula
+ * Project: DoConnect
+ * Description: Implementation of Impression service
+ * Created Date: 17-06-2026
+ */
+
 package com.wipro.doconnect.service;
 
 import java.util.HashMap;
@@ -20,67 +27,81 @@ import com.wipro.doconnect.repository.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
+// Service implementation for impression (like/dislike)
 @Service
 @Slf4j
 public class ImpressionServiceImpl implements ImpressionService {
 
-	@Autowired
-	private ImpressionRepository impressionRepository;
+    // Repository for impressions
+    @Autowired
+    private ImpressionRepository impressionRepository;
 
-	@Autowired
-	private UserRepository userRepository;
+    // Repository for users
+    @Autowired
+    private UserRepository userRepository;
 
-	@Autowired
-	private AnswerRepository answerRepository;
+    // Repository for answers
+    @Autowired
+    private AnswerRepository answerRepository;
 
-	@Override
-	public ImpressionDto saveImpression(ImpressionDto dto) {
+    @Override
+    public ImpressionDto saveImpression(ImpressionDto dto) {
 
-	    log.info("Saving impression of type: {} for answerId: {}", 
-	        dto.getType(), dto.getAnswerId());
+        // Log save action
+        log.info("Saving impression of type: {} for answerId: {}", 
+            dto.getType(), dto.getAnswerId());
 
-	    Impression impression = new Impression();
+        Impression impression = new Impression();
 
-	    impression.setType(dto.getType());
+        // Set impression type
+        impression.setType(dto.getType());
 
-	    Answer answer = answerRepository.findById(dto.getAnswerId())
-	            .orElseThrow(() -> 
-	                new AnswerNotFoundException("Answer not found"));
+        // Get answer by ID
+        Answer answer = answerRepository.findById(dto.getAnswerId())
+                .orElseThrow(() -> 
+                    new AnswerNotFoundException("Answer not found"));
 
-	    impression.setAnswer(answer);
+        impression.setAnswer(answer);
 
-	    String email = SecurityContextHolder.getContext()
-	            .getAuthentication()
-	            .getName();
+        // Get logged-in user
+        String email = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
 
-	    User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
 
-	    if (user == null) {
-	        throw new UserNotFoundException("User not found");
-	    }
+        // Check user exists
+        if (user == null) {
+            throw new UserNotFoundException("User not found");
+        }
 
-	    impression.setUser(user);
+        impression.setUser(user);
 
-	    Impression saved = impressionRepository.save(impression);
+        // Save impression
+        Impression saved = impressionRepository.save(impression);
 
-	    dto.setImpressionId(saved.getImpressionId());
+        // Set generated ID to DTO
+        dto.setImpressionId(saved.getImpressionId());
 
-	    return dto;
-	}
-	
-	@Override
-	public Map<String, Long> getCountByAnswerId(Long answerId) {
+        return dto;
+    }
+    
+    @Override
+    public Map<String, Long> getCountByAnswerId(Long answerId) {
 
-	    Long likes = impressionRepository
-	        .countByAnswer_AnswerIdAndType(answerId, ImpressionType.LIKE);
+        // Count likes
+        Long likes = impressionRepository
+            .countByAnswer_AnswerIdAndType(answerId, ImpressionType.LIKE);
 
-	    Long dislikes = impressionRepository
-	        .countByAnswer_AnswerIdAndType(answerId, ImpressionType.DISLIKE);
+        // Count dislikes
+        Long dislikes = impressionRepository
+            .countByAnswer_AnswerIdAndType(answerId, ImpressionType.DISLIKE);
 
-	    Map<String, Long> result = new HashMap<>();
-	    result.put("likes", likes);
-	    result.put("dislikes", dislikes);
+        // Prepare result map
+        Map<String, Long> result = new HashMap<>();
+        result.put("likes", likes);
+        result.put("dislikes", dislikes);
 
-	    return result;
-	}
+        return result;
+    }
 }

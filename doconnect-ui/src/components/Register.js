@@ -3,10 +3,13 @@ import API from "../services/api";
 import { useNavigate } from "react-router-dom";
 import "../styles/auth.css";
 
+// Register component
 export default function Register() {
 
+  // Navigation hook
   const navigate = useNavigate();
 
+  // State to store registration details
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -14,8 +17,10 @@ export default function Register() {
     role: "USER"
   });
 
+  // Loading state for button
   const [loading, setLoading] = useState(false);
 
+  // Handle input field changes
   const handleChange = (e) => {
     setUser({
       ...user,
@@ -23,19 +28,29 @@ export default function Register() {
     });
   };
 
+  // Handle user registration
   const handleRegister = async () => {
     try {
+      // Start loading
       setLoading(true);
 
+      // Call API to register user
       await API.post("/users/register", user);
 
+      // Success message
       alert("Registration successful");
+
+      // Redirect to login page
       navigate("/");
 
     } catch (err) {
+
+      // Handle error
       console.log(err.response?.data);
       alert(err.response?.data?.message || "Registration failed");
+
     } finally {
+      // Stop loading
       setLoading(false);
     }
   };
@@ -43,14 +58,16 @@ export default function Register() {
   return (
     <div className="auth-container">
 
-      {/* LEFT SIDE (same as login) */}
+      {/* LEFT SIDE */}
       <div className="auth-left">
 
         <h2>DoConnect AI</h2>
 
+        {/* Heading */}
         <h1>Create account</h1>
         <p>Join DoConnect AI and start your AI-powered journey today.</p>
 
+        {/* Features list */}
         <ul>
           <li>Ask, learn and get intelligent answers instantly</li>
           <li>Connect with your team and collaborate</li>
@@ -64,10 +81,11 @@ export default function Register() {
 
         <div className="auth-card">
 
+          {/* Form title */}
           <h3>Create your account</h3>
           <p className="sub-text">Fill in the details to get started</p>
 
-          {/* TWO COLUMN GRID */}
+          {/* Name and Email fields */}
           <div className="form-grid">
 
             <input
@@ -87,6 +105,7 @@ export default function Register() {
 
           </div>
 
+          {/* Password and Role fields */}
           <div className="form-grid">
 
             <input
@@ -97,6 +116,7 @@ export default function Register() {
               onChange={handleChange}
             />
 
+            {/* Role selection */}
             <select
               name="role"
               value={user.role}
@@ -108,10 +128,12 @@ export default function Register() {
 
           </div>
 
+          {/* Register button */}
           <button onClick={handleRegister} disabled={loading}>
             {loading ? "Registering..." : "Create Account"}
           </button>
 
+          {/* Navigate to login */}
           <p className="switch-text">
             Already have an account?
             <span onClick={() => navigate("/")}>

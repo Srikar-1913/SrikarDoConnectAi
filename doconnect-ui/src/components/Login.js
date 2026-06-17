@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import API from "../services/api";
 import "../styles/auth.css";
 
+// Login component
 export default function Login() {
 
   const navigate = useNavigate();
@@ -24,38 +24,24 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-
       setLoading(true);
 
       const res = await API.post("/users/login", user);
 
+      // ✅ Store everything from backend
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
       localStorage.setItem("email", res.data.email);
-      localStorage.setItem("userId", res.data.userId); 
-      // ✅ Decode token
-      const decoded = jwtDecode(res.data.token);
-
-      // ✅ Create user object manually
-      const userData = {
-        name: decoded.sub?.split("@")[0] || "User",
-        email: decoded.sub,
-        role: decoded.role || "USER"
-      };
-
-      // ✅ Store user
-      localStorage.setItem("user", JSON.stringify(userData));
-
+      localStorage.setItem("userId", res.data.userId);
+      localStorage.setItem("name", res.data.name);   // ✅ VERY IMPORTANT
 
       alert("Login successful");
 
       navigate("/dashboard");
 
     } catch (err) {
-
       console.log(err.response?.data);
       alert(err.response?.data?.message || "Login failed");
-
     } finally {
       setLoading(false);
     }
@@ -64,7 +50,6 @@ export default function Login() {
   return (
     <div className="auth-container">
 
-      {/* LEFT SIDE */}
       <div className="auth-left">
 
         <h2>DoConnect AI</h2>
@@ -80,13 +65,14 @@ export default function Login() {
 
       </div>
 
-      {/* RIGHT SIDE */}
       <div className="auth-right">
 
         <div className="auth-card">
 
           <h3>Login to your account</h3>
-          <p className="sub-text">Enter your credentials to access your account</p>
+          <p className="sub-text">
+            Enter your credentials to access your account
+          </p>
 
           <input
             name="email"
@@ -118,6 +104,7 @@ export default function Login() {
         </div>
 
       </div>
+
     </div>
   );
 }

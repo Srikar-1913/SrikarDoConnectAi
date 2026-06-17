@@ -1,38 +1,44 @@
+/* Main app container */
 .App {
-  text-align: center;
+  text-align: center; /* center align content */
 }
 
+/* React logo styling */
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+  height: 40vmin;        /* responsive size */
+  pointer-events: none;  /* disable mouse events */
 }
 
+/* Animation applied if motion is allowed */
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    animation: App-logo-spin infinite 20s linear; /* rotate continuously */
   }
 }
 
+/* Main header section */
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background-color: #282c34; /* dark background */
+  min-height: 100vh;         /* full screen height */
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;       /* center horizontally */
+  justify-content: center;   /* center vertically */
+  font-size: calc(10px + 2vmin); /* responsive font */
   color: white;
 }
 
+/* Link style */
 .App-link {
-  color: #61dafb;
+  color: #61dafb; /* light blue color */
 }
 
+/* Logo rotation animation */
 @keyframes App-logo-spin {
   from {
-    transform: rotate(0deg);
+    transform: rotate(0deg); /* start position */
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg); /* full rotation */
   }
 }

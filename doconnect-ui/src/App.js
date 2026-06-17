@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+// Import all components
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboards/Dashboard";
@@ -15,17 +16,17 @@ import Profile from "./components/Profile";
 import Users from "./components/Users";
 import EditProfile from "./components/EditProfile";
 
-
+// Main App component with routing setup
 function App() {
   return (
     <BrowserRouter>
       <Routes>
 
-        {/* Public */}
+        {/* Public routes (no authentication required) */}
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Protected */}
+        {/* Protected routes (require login) */}
         <Route
           path="/dashboard"
           element={<ProtectedRoute><Dashboard /></ProtectedRoute>}
@@ -51,7 +52,7 @@ function App() {
           element={<ProtectedRoute><AddAnswer /></ProtectedRoute>}
         />
 
-
+        {/* Other pages */}
         <Route path="/chat" element={<ChatPage />} />
 
         <Route path="/profile" element={<Profile />} />
@@ -59,7 +60,6 @@ function App() {
         <Route path="/users" element={<Users />} />
 
         <Route path="/edit-profile" element={<EditProfile />} />
-
 
       </Routes>
     </BrowserRouter>

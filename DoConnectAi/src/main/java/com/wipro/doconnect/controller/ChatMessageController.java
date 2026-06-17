@@ -1,3 +1,10 @@
+/*
+ * Author: Srikar Akula
+ * Project: DoConnect
+ * Description: Controller for ChatMessage APIs
+ * Created Date: 17-06-2026
+ */
+
 package com.wipro.doconnect.controller;
 
 import java.util.List;
@@ -19,53 +26,70 @@ import com.wipro.doconnect.service.ChatMessageService;
 
 import lombok.extern.slf4j.Slf4j;
 
+// REST controller for ChatMessage operations
 @RestController
 @RequestMapping("/chatmessages")
 @Slf4j
 public class ChatMessageController {
 
-	@Autowired
-	private ChatMessageService chatMessageService;
+    // Service to handle message logic
+    @Autowired
+    private ChatMessageService chatMessageService;
 
-	@PostMapping("/save")
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-	public ChatMessage saveMessage(@RequestBody ChatMessageDto chatMessageDto) {
-		log.info("POST / message added successfully");
+    // Create new message
+    @PostMapping("/save")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ChatMessage saveMessage(@RequestBody ChatMessageDto chatMessageDto) {
 
-		return chatMessageService.saveMessage(chatMessageDto);
-	}
+        // Log action
+        log.info("POST / message added successfully");
 
-	@GetMapping("/getAll")
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-	public List<ChatMessage> getAllMessages() {
-		log.info("GET / retrived all messages successfully");
+        return chatMessageService.saveMessage(chatMessageDto);
+    }
 
-		return chatMessageService.getAllMessages();
-	}
+    // Get all messages
+    @GetMapping("/getAll")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public List<ChatMessage> getAllMessages() {
 
-	@GetMapping("/get/{messageId}")
-	@PreAuthorize("hasAnyRole('ADMIN')")
-	public ChatMessage getMessageById(@PathVariable Long messageId) {
-		log.info("GET / retrived message by id");
+        // Log action
+        log.info("GET / retrieved all messages successfully");
 
-		return chatMessageService.getMessageById(messageId);
-	}
+        return chatMessageService.getAllMessages();
+    }
 
-	@PutMapping("/update/{messageId}")
-	@PreAuthorize("hasAnyRole('ADMIN')")
-	public ChatMessage updateMessage(@PathVariable Long messageId, @RequestBody ChatMessageDto chatMessageDto) {
-		log.info("PUT / message updated successfully");
+    // Get message by ID (admin only)
+    @GetMapping("/get/{messageId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ChatMessage getMessageById(@PathVariable Long messageId) {
 
-		return chatMessageService.updateMessage(messageId, chatMessageDto);
-	}
+        // Log action
+        log.info("GET / retrieved message by id");
 
-	@DeleteMapping("/delete/{messageId}")
-	@PreAuthorize("hasAnyRole('ADMIN')")
-	public String deleteMessage(@PathVariable Long messageId) {
-		log.info("POST / message deleted successfully");
+        return chatMessageService.getMessageById(messageId);
+    }
 
-		chatMessageService.deleteMessage(messageId);
+    // Update message (admin only)
+    @PutMapping("/update/{messageId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ChatMessage updateMessage(@PathVariable Long messageId, @RequestBody ChatMessageDto chatMessageDto) {
 
-		return "Message Deleted Successfully";
-	}
+        // Log action
+        log.info("PUT / message updated successfully");
+
+        return chatMessageService.updateMessage(messageId, chatMessageDto);
+    }
+
+    // Delete message (admin only)
+    @DeleteMapping("/delete/{messageId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public String deleteMessage(@PathVariable Long messageId) {
+
+        // Log action
+        log.info("DELETE / message deleted successfully");
+
+        chatMessageService.deleteMessage(messageId);
+
+        return "Message Deleted Successfully";
+    }
 }

@@ -1,3 +1,10 @@
+/*
+ * Author: Srikar Akula
+ * Project: DoConnect
+ * Description: Controller for impression APIs
+ * Created Date: 17-06-2026
+ */
+
 package com.wipro.doconnect.controller;
 
 import java.util.Map;
@@ -16,26 +23,35 @@ import com.wipro.doconnect.service.ImpressionService;
 
 import lombok.extern.slf4j.Slf4j;
 
+// REST controller for impression (like/dislike)
 @RestController
 @RequestMapping("/impressions")
 @Slf4j
 public class ImpressionController {
 
-	@Autowired
-	private ImpressionService impressionService;
+    // Service to handle impression logic
+    @Autowired
+    private ImpressionService impressionService;
 
-	@PostMapping
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-	public ImpressionDto saveImpression(@RequestBody ImpressionDto dto) {
-		log.info("POST / impression added successfully");
-		
-		return impressionService.saveImpression(dto);
-	}
-	
-	@GetMapping("/count/{answerId}")
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-	public Map<String, Long> getCount(@PathVariable Long answerId) {
-	    log.info("GET / count for answerId: {}", answerId);
-	    return impressionService.getCountByAnswerId(answerId);
-	}
+    // Save like or dislike
+    @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ImpressionDto saveImpression(@RequestBody ImpressionDto dto) {
+
+        // Log action
+        log.info("POST / impression added successfully");
+        
+        return impressionService.saveImpression(dto);
+    }
+    
+    // Get like and dislike count for an answer
+    @GetMapping("/count/{answerId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public Map<String, Long> getCount(@PathVariable Long answerId) {
+
+        // Log action
+        log.info("GET / count for answerId: {}", answerId);
+
+        return impressionService.getCountByAnswerId(answerId);
+    }
 }

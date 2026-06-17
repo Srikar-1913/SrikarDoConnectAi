@@ -1,15 +1,15 @@
 /* MAIN LAYOUT */
 .dashboard-container {
-  display: flex;
+  display: flex;                 /* sidebar + main content */
   height: 100vh;
-  background: #f5f7fb;
+  background: #f5f7fb;           /* light background */
   font-family: "Segoe UI", sans-serif;
 }
 
 /* SIDEBAR */
 .sidebar {
   width: 240px;
-  background: linear-gradient(180deg, #0f172a, #1e293b);
+  background: linear-gradient(180deg, #0f172a, #1e293b); /* dark gradient */
   color: white;
   padding: 20px;
   display: flex;
@@ -18,6 +18,7 @@
   border-bottom-right-radius: 20px;
 }
 
+/* Sidebar logo/title */
 .logo {
   font-weight: bold;
   font-size: 20px;
@@ -38,20 +39,22 @@
   font-size: 14px;
 }
 
+/* Hover effect */
 .menu-item:hover {
   background: rgba(255, 255, 255, 0.1);
   color: white;
 }
 
+/* Active menu item */
 .menu-item.active {
   background: linear-gradient(90deg, #6366f1, #8b5cf6);
   color: white;
   font-weight: 500;
 }
 
-/* LOGOUT */
+/* LOGOUT BUTTON */
 .logout-btn {
-  margin-top: auto;
+  margin-top: auto;              /* push to bottom */
   background: linear-gradient(90deg, #ef4444, #dc2626);
   border: none;
   color: white;
@@ -61,11 +64,12 @@
   transition: 0.2s;
 }
 
+/* Logout hover */
 .logout-btn:hover {
   opacity: 0.9;
 }
 
-/* MAIN CONTENT */
+/* MAIN CONTENT AREA */
 .main-content {
   flex: 1;
   padding: 25px 30px;
@@ -78,18 +82,20 @@
   align-items: center;
 }
 
+/* Title */
 .topbar h3 {
   margin: 0;
   font-weight: bold;
 }
 
+/* Subtitle */
 .topbar p {
   margin: 0;
   font-size: 13px;
   color: #64748b;
 }
 
-/* SEARCH */
+/* SEARCH BAR */
 .search-bar {
   padding: 10px 15px;
   border-radius: 12px;
@@ -100,6 +106,7 @@
   transition: 0.2s;
 }
 
+/* Search focus effect */
 .search-bar:focus {
   border-color: #6366f1;
 }
@@ -107,12 +114,12 @@
 /* STATS GRID */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
   gap: 20px;
   margin-top: 20px;
 }
 
-/* STATS CARD */
+/* STAT CARD */
 .stat-card {
   background: #ffffff;
   padding: 20px;
@@ -121,26 +128,30 @@
   transition: all 0.2s ease;
 }
 
+/* Stat label */
 .stat-card p {
   margin: 0;
   font-size: 13px;
   color: #64748b;
 }
 
+/* Stat value */
 .stat-card h3 {
   margin-top: 8px;
   font-weight: bold;
 }
 
+/* Hover animation */
 .stat-card:hover {
   transform: translateY(-5px);
 }
 
+/* CONTENT SECTION */
 .content-section {
   margin-top: 25px;
 }
 
-/* OPTIONAL PREMIUM TOUCHES */
+/* QUESTION CARD */
 .question-card {
   border-radius: 16px;
   background: #ffffff;
@@ -149,6 +160,7 @@
   transition: all 0.2s ease;
 }
 
+/* Hover effect */
 .question-card:hover {
   transform: translateY(-4px);
 }
@@ -160,7 +172,7 @@
   font-size: 11px;
 }
 
-/* SCROLLBAR MODERN */
+/* CUSTOM SCROLLBAR */
 ::-webkit-scrollbar {
   width: 6px;
 }

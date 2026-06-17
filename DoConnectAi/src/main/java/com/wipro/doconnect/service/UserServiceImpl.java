@@ -1,3 +1,10 @@
+/*
+ * Author: Srikar Akula
+ * Project: DoConnect
+ * Description: Implementation of User service
+ * Created Date: 17-06-2026
+ */
+
 package com.wipro.doconnect.service;
 
 import java.time.LocalDateTime;
@@ -16,120 +23,156 @@ import com.wipro.doconnect.repository.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
+// Service implementation for user operations
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-	@Autowired
-	private UserRepository userRepository;
+    // Repository for users
+    @Autowired
+    private UserRepository userRepository;
 
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
+    // Password encoder for security
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
-	// Register User
-	@Override
-	public UserDto addUser(UserDto userDto) {
-		log.info("Registering user with email: {}", userDto.getEmail());
+    // Register User
+    @Override
+    public UserDto addUser(UserDto userDto) {
 
-		// check if email already exists
-		if (userRepository.findByEmail(userDto.getEmail()) != null) {
-			throw new RuntimeException("User already exists");
-		}
+        // Log registration
+        log.info("Registering user with email: {}", userDto.getEmail());
 
-		User user = new User();
+        // Check if email already exists
+        if (userRepository.findByEmail(userDto.getEmail()) != null) {
+            throw new RuntimeException("User already exists");
+        }
 
-		user.setName(userDto.getName());
-		user.setEmail(userDto.getEmail());
+        User user = new User();
 
-		// encode password
-		user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        // Set user details
+        user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
 
-		if (userDto.getRole() == null) {
-			user.setRole(Role.USER);
-		} else {
-			user.setRole(userDto.getRole());
-		}
+        // Encode password
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-		user.setCreatedAt(LocalDateTime.now());
+        // Set role (default USER)
+        if (userDto.getRole() == null) {
+            user.setRole(Role.USER);
+        } else {
+            user.setRole(userDto.getRole());
+        }
 
-		User savedUser = userRepository.save(user);
+        user.setCreatedAt(LocalDateTime.now());
 
-		userDto.setUserId(savedUser.getUserId());
+        // Save user
+        User savedUser = userRepository.save(user);
 
-		return userDto;
-	}
+        // Set generated ID in DTO
+        userDto.setUserId(savedUser.getUserId());
 
-	// Login
-	@Override
-	public User login(String email, String password) {
-		log.info("User login attempt with email: {}", email);
+        return userDto;
+    }
 
-		User user = userRepository.findByEmail(email);
+    // Login
+    @Override
+    public User login(String email, String password) {
 
-		if (user == null) {
-			throw new UserNotFoundException("User not found");
-		}
+        // Log login attempt
+        log.info("User login attempt with email: {}", email);
 
-		if (!passwordEncoder.matches(password, user.getPassword())) {
-			throw new RuntimeException("Invalid credentials");
-		}
+        // Find user by email
+        User user = userRepository.findByEmail(email);
 
-		return user;
-	}
+        // Check user exists
+        if (user == null) {
+            throw new UserNotFoundException("User not found");
+        }
 
-	@Override
-	public UserDto getUserById(Long userId) {
+        // Check password
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
 
-		User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
+        return user;
+    }
 
-		return convertToDto(user);
-	}
+    @Override
+    public UserDto getUserById(Long userId) {
 
-	@Override
-	public List<UserDto> getAllUsers() {
+        // Get user by ID
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-		return userRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
-	}
+        // Convert to DTO
+        return convertToDto(user);
+    }
 
-	@Override
-	public UserDto updateUser(Long userId, UserDto userDto) {
-		log.info("Updating user with id: {}", userId);
+    @Override
+    public List<UserDto> getAllUsers() {
 
-		User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
+        // Get all users and convert to DTO list
+        return userRepository.findAll()
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
 
-		user.setName(userDto.getName());
-		user.setEmail(userDto.getEmail());
+    @Override
+    public UserDto updateUser(Long userId, UserDto userDto) {
 
-		user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-		user.setRole(userDto.getRole());
-	
+        // Log update action
+        log.info("Updating user with id: {}", userId);
 
-		User updatedUser = userRepository.save(user);
+        // Get existing user
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-		return convertToDto(updatedUser);
-	}
+        // Update details
+        user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
 
-	@Override
-	public String deleteUser(Long userId) {
-		log.info("Deleting user with id: {}", userId);
+        // Encode and update password
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-		User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.setRole(userDto.getRole());
+    
+        // Save updated user
+        User updatedUser = userRepository.save(user);
 
-		userRepository.delete(user);
+        // Convert to DTO
+        return convertToDto(updatedUser);
+    }
 
-		return "User deleted successfully";
-	}
+    @Override
+    public String deleteUser(Long userId) {
 
-	private UserDto convertToDto(User user) {
+        // Log delete action
+        log.info("Deleting user with id: {}", userId);
 
-		UserDto dto = new UserDto();
+        // Get user by ID
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-		dto.setUserId(user.getUserId());
-		dto.setName(user.getName());
-		dto.setEmail(user.getEmail());
-		dto.setPassword(user.getPassword());
-		dto.setRole(user.getRole());
+        // Delete user
+        userRepository.delete(user);
 
-		return dto;
-	}
+        return "User deleted successfully";
+    }
+
+    // Convert User entity to DTO
+    private UserDto convertToDto(User user) {
+
+        UserDto dto = new UserDto();
+
+        // Map fields
+        dto.setUserId(user.getUserId());
+        dto.setName(user.getName());
+        dto.setEmail(user.getEmail());
+        dto.setPassword(user.getPassword());
+        dto.setRole(user.getRole());
+
+        return dto;
+    }
 }

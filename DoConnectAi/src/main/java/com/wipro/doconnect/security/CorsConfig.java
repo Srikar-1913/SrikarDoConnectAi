@@ -1,3 +1,10 @@
+/*
+ * Author: Srikar Akula
+ * Project: DoConnect
+ * Description: Configuration class for CORS settings
+ * Created Date: 17-06-2026
+ */
+
 package com.wipro.doconnect.security;
 
 import org.springframework.context.annotation.Bean;
@@ -6,26 +13,34 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-
+// Configuration class for handling CORS
 @Configuration
 public class CorsConfig {
 
-	 @Bean
-	    public CorsFilter corsFilter() {
+    // Bean to enable CORS
+    @Bean
+    public CorsFilter corsFilter() {
 
-	        CorsConfiguration config = new CorsConfiguration();
+        // Create CORS configuration
+        CorsConfiguration config = new CorsConfiguration();
 
-	        config.addAllowedOrigin("http://localhost:3000");
-	        config.addAllowedHeader("*");
-	        config.addAllowedMethod("*");
-	        config.setAllowCredentials(true);
+        // Allow requests from frontend (React)
+        config.addAllowedOrigin("http://localhost:3000");
 
-	        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-	        source.registerCorsConfiguration("/**", config);
+        // Allow all headers
+        config.addAllowedHeader("*");
 
-	        return new CorsFilter(source);
-	
-	 }
-	 
+        // Allow all HTTP methods (GET, POST, PUT, DELETE)
+        config.addAllowedMethod("*");
+
+        // Allow credentials (cookies, auth headers)
+        config.setAllowCredentials(true);
+
+        // Apply configuration to all endpoints
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        // Return CORS filter
+        return new CorsFilter(source);
+    }
 }
-

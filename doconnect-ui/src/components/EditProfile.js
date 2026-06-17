@@ -6,6 +6,7 @@ import "../styles/editprofile.css";
 export default function EditProfile() {
 
     const navigate = useNavigate();
+
     const roleFromStorage = localStorage.getItem("role");
 
     const [userId, setUserId] = useState(null);
@@ -22,36 +23,27 @@ export default function EditProfile() {
         loadUser();
     }, []);
 
-    // ✅ LOAD USER USING EMAIL (NO BACKEND CHANGE REQUIRED)
+    // ✅ FIXED: Get user by ID (NOT /users/all)
     const loadUser = async () => {
         try {
-            const email = localStorage.getItem("email");
+            const id = localStorage.getItem("userId");
 
-            if (!email) {
-                console.log("Email not found");
+            if (!id) {
+                console.log("User ID not found");
                 return;
             }
 
-            const res = await API.get("/users/all");
+            // ✅ CORRECT API
+            const res = await API.get(`/users/${id}`);
 
-            const currentUser = res.data.find(u => u.email === email);
-
-            if (!currentUser) {
-                console.log("User not found");
-                return;
-            }
-
-            console.log("USER FOUND:", currentUser);
-
-            // ✅ store userId in state
-            setUserId(currentUser.userId);
+            setUserId(id);
 
             setUser({
-                name: currentUser.name,
-                email: currentUser.email,
+                name: res.data.name,
+                email: res.data.email,
                 password: "",
                 confirmPassword: "",
-                role: currentUser.role
+                role: res.data.role
             });
 
         } catch (err) {
@@ -90,11 +82,17 @@ export default function EditProfile() {
         }
 
         try {
+            // ✅ CORRECT UPDATE API
             const res = await API.put(`/users/${userId}`, payload);
 
             console.log("UPDATE SUCCESS:", res.data);
 
+            // ✅ UPDATE LOCAL STORAGE
+            localStorage.setItem("name", payload.name);
+            localStorage.setItem("email", payload.email);
+
             alert("Profile updated");
+
             navigate("/profile");
 
         } catch (err) {
@@ -115,7 +113,6 @@ export default function EditProfile() {
                     <div className="avatar">
                         {user.name ? user.name.charAt(0).toUpperCase() : "U"}
                     </div>
-                    <p>Click to upload</p>
                 </div>
 
                 <form className="profile-form" onSubmit={handleSubmit}>
@@ -174,6 +171,7 @@ export default function EditProfile() {
                     )}
 
                     <div className="button-group">
+
                         <button
                             type="button"
                             className="btn cancel"
@@ -185,6 +183,7 @@ export default function EditProfile() {
                         <button type="submit" className="btn submit">
                             Update Profile
                         </button>
+
                     </div>
 
                 </form>

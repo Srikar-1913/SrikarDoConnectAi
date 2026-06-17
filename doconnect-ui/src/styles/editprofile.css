@@ -1,24 +1,25 @@
-/* Page background */
+/* Page background container */
 .edit-container {
-  padding: 40px;
-  background: #f5f7fb;
-  min-height: 100vh;
+  padding: 40px;              /* space around content */
+  background: #f5f7fb;        /* light background */
+  min-height: 100vh;          /* full height */
 }
 
-/* Title */
+/* Page title */
 .edit-container h2 {
   margin-bottom: 5px;
   font-size: 26px;
 }
 
+/* Subtitle text */
 .subtitle {
   color: #777;
   margin-bottom: 25px;
 }
 
-/* Card */
+/* Main card container */
 .edit-card {
-  display: flex;
+  display: flex;              /* left + form layout */
   gap: 40px;
   padding: 25px;
   background: #ffffff;
@@ -26,44 +27,46 @@
   box-shadow: 0 6px 20px rgba(0,0,0,0.08);
 }
 
-/* Left (image section) */
+/* Left section (profile preview) */
 .profile-left {
   text-align: center;
 }
 
+/* Text under avatar */
 .profile-left p {
   margin-top: 10px;
   font-size: 13px;
   color: #666;
 }
 
-/* Profile image */
+/* Profile image (if used) */
 .profile-img {
   width: 120px;
   height: 120px;
-  border-radius: 50%;
+  border-radius: 50%;         /* circular image */
   border: 3px solid #e0e0e0;
 }
 
-/* Form */
+/* Form section */
 .profile-form {
-  flex: 1;
+  flex: 1;                    /* take remaining space */
 }
 
-/* Form group */
+/* Each form field */
 .form-group {
   margin-bottom: 18px;
   display: flex;
   flex-direction: column;
 }
 
+/* Labels */
 .form-group label {
   font-size: 14px;
   margin-bottom: 6px;
   font-weight: 500;
 }
 
-/* Inputs */
+/* Inputs and dropdowns */
 .form-group input,
 .form-group select {
   padding: 12px;
@@ -74,7 +77,7 @@
   background: #fafafa;
 }
 
-/* Focus */
+/* Focus effect for inputs */
 .form-group input:focus,
 .form-group select:focus {
   border-color: #007bff;
@@ -83,10 +86,10 @@
   box-shadow: 0 0 0 2px rgba(0,123,255,0.15);
 }
 
-/* Buttons */
+/* Buttons container */
 .button-group {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end;  /* align right */
   gap: 15px;
   margin-top: 25px;
 }
@@ -100,6 +103,7 @@
   cursor: pointer;
 }
 
+/* Cancel hover */
 .btn.cancel:hover {
   background: #ddd;
 }
@@ -114,10 +118,12 @@
   cursor: pointer;
 }
 
+/* Submit hover */
 .btn.submit:hover {
   background: #0056b3;
 }
 
+/* Avatar circle with initial */
 .avatar {
   width: 120px;
   height: 120px;

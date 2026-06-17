@@ -1,5 +1,7 @@
+// Chat component to display messages and send new messages
 export default function Chat({ messages, sendMessage, text, setText, questionId }) {
 
+  // Get logged-in user ID
   const userId = localStorage.getItem("userId");
 
   return (
@@ -13,7 +15,10 @@ export default function Chat({ messages, sendMessage, text, setText, questionId 
         border: "1px solid #ccc"
       }}>
 
+        {/* Loop through messages */}
         {messages?.map((m) => {
+
+          // Check if message belongs to current user
           const isMe = m.user?.userId == userId;
 
           return (
@@ -27,7 +32,7 @@ export default function Chat({ messages, sendMessage, text, setText, questionId 
               }}
             >
 
-              {/* LEFT AVATAR */}
+              {/* LEFT AVATAR for other users */}
               {!isMe && (
                 <div style={{
                   width: "30px",
@@ -41,11 +46,12 @@ export default function Chat({ messages, sendMessage, text, setText, questionId 
                   fontSize: "12px",
                   marginRight: "6px"
                 }}>
+                  {/* First letter of user name */}
                   {m.user?.name?.charAt(0)}
                 </div>
               )}
 
-              {/* MESSAGE */}
+              {/* MESSAGE BOX */}
               <div style={{
                 maxWidth: "200px",
                 padding: "6px 10px",
@@ -56,6 +62,7 @@ export default function Chat({ messages, sendMessage, text, setText, questionId 
               }}>
                 {m.message}
 
+                {/* Message timestamp */}
                 <div style={{
                   fontSize: "10px",
                   marginTop: "3px",
@@ -68,7 +75,7 @@ export default function Chat({ messages, sendMessage, text, setText, questionId 
                 </div>
               </div>
 
-              {/* RIGHT AVATAR */}
+              {/* RIGHT AVATAR for current user */}
               {isMe && (
                 <div style={{
                   width: "30px",
@@ -82,6 +89,7 @@ export default function Chat({ messages, sendMessage, text, setText, questionId 
                   fontSize: "12px",
                   marginLeft: "6px"
                 }}>
+                  {/* First letter of user name */}
                   {m.user?.name?.charAt(0)}
                 </div>
               )}
@@ -92,9 +100,10 @@ export default function Chat({ messages, sendMessage, text, setText, questionId 
 
       </div>
 
-      {/* INPUT */}
+      {/* INPUT SECTION */}
       <div style={{ display: "flex", marginTop: "10px" }}>
 
+        {/* Input for typing message */}
         <input
           placeholder="Type a message..."
           value={text?.[questionId] || ""}
@@ -112,6 +121,7 @@ export default function Chat({ messages, sendMessage, text, setText, questionId 
           }}
         />
 
+        {/* Send message button */}
         <button
           onClick={() => sendMessage(questionId)}
           style={{

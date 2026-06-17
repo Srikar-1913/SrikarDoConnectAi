@@ -1,3 +1,10 @@
+/*
+ * Author: Srikar Akula
+ * Project: DoConnect
+ * Description: Entity class for Answer table
+ * Created Date: 17-06-2026
+ */
+
 package com.wipro.doconnect.entity;
 
 import java.time.LocalDateTime;
@@ -14,41 +21,49 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+// Lombok annotations for boilerplate code
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 @ToString
 
+// Entity mapped to answers table
 @Entity
 @Table(name = "answers")
 public class Answer {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long answerId;
+    // Primary key
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long answerId;
 
-	private String content;
+    // Answer content
+    private String content;
 
-	private LocalDateTime createdAt;
+    // Created time
+    private LocalDateTime createdAt;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	@ToString.Exclude
-	private User user;
+    // Many answers belong to one user
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @ToString.Exclude
+    private User user;
 
-	@ManyToOne
-	@JoinColumn(name = "question_id")
-	private Question question;
+    // Many answers belong to one question
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private Question question;
 
-	@OneToMany(mappedBy = "answer", cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonIgnore
-	private List<Impression> impressions;
-
+    // One answer has many impressions (likes/dislikes)
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Impression> impressions;
 }

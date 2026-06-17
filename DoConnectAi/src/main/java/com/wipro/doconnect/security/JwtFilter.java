@@ -1,3 +1,10 @@
+/*
+ * Author: Srikar Akula
+ * Project: DoConnect
+ * Description: JWT filter for authentication
+ * Created Date: 17-06-2026
+ */
+
 package com.wipro.doconnect.security;
 
 import java.io.IOException;
@@ -15,9 +22,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+// Filter to validate JWT token for each request
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
+    // Utility class for JWT operations
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -27,29 +36,33 @@ public class JwtFilter extends OncePerRequestFilter {
                                    FilterChain filterChain)
             throws ServletException, IOException {
 
+        // Get request path
         String path = request.getRequestURI();
 
-        // ✅ Skip authentication for public endpoints
+        // Skip authentication for login and register
         if (path.equals("/users/login") || path.equals("/users/register")) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        // Get Authorization header
         String authHeader = request.getHeader("Authorization");
 
-        // ✅ If no token, just continue
+        // If no token, continue request
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        // Extract token
         String token = authHeader.substring(7);
 
         try {
-            // ✅ Extract details
+            // Extract email and role from token
             String email = jwtUtil.extractEmail(token);
             String role = jwtUtil.extractRole(token);
 
+            // Set authentication if not already set
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 UsernamePasswordAuthenticationToken auth =
@@ -63,11 +76,12 @@ public class JwtFilter extends OncePerRequestFilter {
             }
 
         } catch (Exception e) {
-            // ✅ VERY IMPORTANT: prevent crash for expired/invalid token
+
+            // Handle invalid or expired token
             System.out.println("JWT expired or invalid: " + e.getMessage());
         }
 
-        // ✅ Always continue request
+        // Continue request processing
         filterChain.doFilter(request, response);
     }
 }

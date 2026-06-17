@@ -1,37 +1,39 @@
+/* Main chat container */
 .chat-container {
   margin-top: 10px;
 }
 
-/* chat box */
+/* Chat box area */
 .chat-box {
-  max-height: 300px;
-  overflow-y: auto;
+  max-height: 300px;        /* limit height */
+  overflow-y: auto;         /* allow scrolling */
   padding: 10px;
-  background: #f7f8fc;
+  background: #f7f8fc;      /* light background */
   border-radius: 10px;
 }
 
-/* row (KEY FIX) */
+/* Each message row */
 .chat-row {
   display: flex;
   align-items: center;
   margin-bottom: 8px;
 }
 
-/* alignment */
+/* Align messages from other users */
 .other-row {
   justify-content: flex-start;
 }
 
+/* Align messages from current user */
 .my-row {
   justify-content: flex-end;
 }
 
-/* avatar (professional size) */
+/* Avatar circle */
 .avatar {
   width: 26px;
   height: 26px;
-  min-width: 26px;
+  min-width: 26px;          /* prevent shrinking */
 
   border-radius: 50%;
   background: #6c63ff;
@@ -45,30 +47,30 @@
   margin: 0 6px;
 }
 
-/* ✅ PERFECT CHAT BUBBLE */
+/* Chat message bubble */
 .chat-bubble {
-  max-width: 60%;          /* ✅ responsive */
+  max-width: 60%;           /* responsive width */
   padding: 6px 10px;
   border-radius: 10px;
 
   font-size: 13px;
   line-height: 1.4;
 
-  word-break: break-word;
+  word-break: break-word;   /* wrap long text */
 }
 
-/* left bubble */
+/* Bubble for other users */
 .other-bubble {
   background: #eaeaf1;
 }
 
-/* right bubble */
+/* Bubble for current user */
 .my-bubble {
   background: linear-gradient(135deg, #7b5cff, #5a9cff);
   color: white;
 }
 
-/* time */
+/* Message timestamp */
 .time {
   display: block;
   font-size: 10px;
@@ -76,12 +78,13 @@
   opacity: 0.6;
 }
 
-/* input */
+/* Input container */
 .chat-input-box {
   display: flex;
   margin-top: 10px;
 }
 
+/* Input field */
 .chat-input {
   flex: 1;
   padding: 8px;
@@ -90,6 +93,7 @@
   font-size: 13px;
 }
 
+/* Send button */
 .send-btn {
   margin-left: 6px;
   background: #6c63ff;

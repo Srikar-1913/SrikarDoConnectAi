@@ -1,3 +1,10 @@
+/*
+ * Author: Srikar Akula
+ * Project: DoConnect
+ * Description: Implementation of ChatMessage service
+ * Created Date: 17-06-2026
+ */
+
 package com.wipro.doconnect.service;
 
 import java.time.LocalDateTime;
@@ -20,77 +27,101 @@ import com.wipro.doconnect.repository.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
+// Service implementation for chat message operations
 @Service
 @Slf4j
 public class ChatMessageServiceImpl implements ChatMessageService {
 
-	@Autowired
-	private ChatMessageRepository chatMessageRepository;
+    // Repository for chat messages
+    @Autowired
+    private ChatMessageRepository chatMessageRepository;
 
-	@Autowired
-	private UserRepository userRepository;
+    // Repository for user
+    @Autowired
+    private UserRepository userRepository;
 
-	@Autowired
-	private AnswerRepository answerRepository;
+    // Repository for answer
+    @Autowired
+    private AnswerRepository answerRepository;
 
-	@Override
-	public ChatMessage saveMessage(ChatMessageDto chatMessageDto) {
+    @Override
+    public ChatMessage saveMessage(ChatMessageDto chatMessageDto) {
 
-		log.info("Saving chat message for answerId: {}", chatMessageDto.getAnswerId());
+        // Log save action
+        log.info("Saving chat message for answerId: {}", chatMessageDto.getAnswerId());
 
-		ChatMessage chatMessage = new ChatMessage();
+        ChatMessage chatMessage = new ChatMessage();
 
-		chatMessage.setMessage(chatMessageDto.getMessage());
-		chatMessage.setSentAt(LocalDateTime.now());
+        // Set message content and time
+        chatMessage.setMessage(chatMessageDto.getMessage());
+        chatMessage.setSentAt(LocalDateTime.now());
 
-		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        // Get logged-in user email
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
-		User user = userRepository.findByEmail(email);
+        // Find user by email
+        User user = userRepository.findByEmail(email);
 
-		if (user == null) {
-			throw new UserNotFoundException("User not found with email: " + email);
-		}
+        // Check user exists
+        if (user == null) {
+            throw new UserNotFoundException("User not found with email: " + email);
+        }
 
-		chatMessage.setUser(user);
+        chatMessage.setUser(user);
 
-		Answer answer = answerRepository.findById(chatMessageDto.getAnswerId()).orElseThrow(
-				() -> new AnswerNotFoundException("Answer not found with id: " + chatMessageDto.getAnswerId()));
+        // Get answer by ID
+        Answer answer = answerRepository.findById(chatMessageDto.getAnswerId()).orElseThrow(
+                () -> new AnswerNotFoundException("Answer not found with id: " + chatMessageDto.getAnswerId()));
 
-		chatMessage.setAnswer(answer);
+        chatMessage.setAnswer(answer);
 
-		return chatMessageRepository.save(chatMessage);
-	}
+        // Save message
+        return chatMessageRepository.save(chatMessage);
+    }
 
-	@Override
-	public List<ChatMessage> getAllMessages() {
-		return chatMessageRepository.findAll();
-	}
+    @Override
+    public List<ChatMessage> getAllMessages() {
 
-	@Override
-	public ChatMessage getMessageById(Long messageId) {
-		return chatMessageRepository.findById(messageId)
-				.orElseThrow(() -> new ChatMessageNotFoundException("Message not found with id : " + messageId));
-	}
+        // Get all messages
+        return chatMessageRepository.findAll();
+    }
 
-	@Override
-	public ChatMessage updateMessage(Long messageId, ChatMessageDto chatMessageDto) {
-		log.info("Updating chat message with id: {}", messageId);
+    @Override
+    public ChatMessage getMessageById(Long messageId) {
 
-		ChatMessage existingMessage = chatMessageRepository.findById(messageId)
-				.orElseThrow(() -> new ChatMessageNotFoundException("Message not found with id : " + messageId));
+        // Get message by ID or throw exception
+        return chatMessageRepository.findById(messageId)
+                .orElseThrow(() -> new ChatMessageNotFoundException("Message not found with id : " + messageId));
+    }
 
-		existingMessage.setMessage(chatMessageDto.getMessage());
+    @Override
+    public ChatMessage updateMessage(Long messageId, ChatMessageDto chatMessageDto) {
 
-		return chatMessageRepository.save(existingMessage);
-	}
+        // Log update action
+        log.info("Updating chat message with id: {}", messageId);
 
-	@Override
-	public void deleteMessage(Long messageId) {
-		log.info("Deleting chat message with id: {}", messageId);
+        // Get existing message
+        ChatMessage existingMessage = chatMessageRepository.findById(messageId)
+                .orElseThrow(() -> new ChatMessageNotFoundException("Message not found with id : " + messageId));
 
-		ChatMessage chatMessage = chatMessageRepository.findById(messageId)
-				.orElseThrow(() -> new ChatMessageNotFoundException("Message not found with id : " + messageId));
+        // Update message content
+        existingMessage.setMessage(chatMessageDto.getMessage());
 
-		chatMessageRepository.delete(chatMessage);
-	}
+        // Save updated message
+        return chatMessageRepository.save(existingMessage);
+    }
+
+    @Override
+    public void deleteMessage(Long messageId) {
+
+        // Log delete action
+        log.info("Deleting chat message with id: {}", messageId);
+
+        // Get message by ID
+        ChatMessage chatMessage = chatMessageRepository.findById(messageId)
+                .orElseThrow(() -> new ChatMessageNotFoundException("Message not found with id : " + messageId));
+
+        // Delete message
+        chatMessageRepository.delete(chatMessage);
+    }
 }

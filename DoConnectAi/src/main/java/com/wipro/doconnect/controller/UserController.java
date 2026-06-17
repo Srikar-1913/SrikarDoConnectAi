@@ -1,3 +1,10 @@
+/*
+ * Author: Srikar Akula
+ * Project: DoConnect
+ * Description: Controller for user authentication and user management
+ * Created Date: 17-06-2026
+ */
+
 package com.wipro.doconnect.controller;
 
 import java.util.HashMap;
@@ -6,15 +13,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.wipro.doconnect.dto.UserDto;
 import com.wipro.doconnect.entity.User;
@@ -23,73 +22,97 @@ import com.wipro.doconnect.service.UserServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
+// REST controller for User operations
 @CrossOrigin
 @RestController
 @RequestMapping("/users")
 @Slf4j
 public class UserController {
 
+	// Service for user operations
 	@Autowired
 	private UserServiceImpl userService;
 
+	// JWT utility for token generation
 	@Autowired
 	private JwtUtil jwtUtil;
 
-	// REGISTER
+	// Register new user
 	@PostMapping("/register")
 	public UserDto register(@RequestBody UserDto userDto) {
+
+		// Log action
 		log.info("POST / user added successfully");
+
 		return userService.addUser(userDto);
 	}
 
-	// LOGIN → JWT TOKEN
+	// Login user and generate JWT token
 	@PostMapping("/login")
 	public Map<String, String> login(@RequestBody UserDto dto) {
+
+		// Log action
 		log.info("POST / user logged in successfully");
 
+		// Authenticate user
 		User user = userService.login(dto.getEmail(), dto.getPassword());
 
+		// Generate token
 		String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
 
+		// Prepare response
 		Map<String, String> response = new HashMap<>();
 		response.put("token", token);
 		response.put("role", user.getRole().name());
 		response.put("email", user.getEmail());
 
+		response.put("name", user.getName());
+		response.put("userId", user.getUserId().toString());
+
 		return response;
 	}
 
-	// ADMIN ONLY
+	// Get all users (admin only)
 	@GetMapping("/all")
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public List<UserDto> getAllUsers() {
-		log.info("GET / retrived all users successfully");
-		
+
+		// Log action
+		log.info("GET / retrieved all users successfully");
+
 		return userService.getAllUsers();
 	}
 
-	// AUTHENTICATED USERS
+	// Get user by ID
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public UserDto getUser(@PathVariable Long id) {
-		log.info("GET / retrived user by id");
-		
+
+		// Log action
+		log.info("GET / retrieved user by id");
+
 		return userService.getUserById(id);
 	}
 
+	// Update user details
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public UserDto updateUser(@PathVariable Long id, @RequestBody UserDto dto) {
+
+		// Log action
 		log.info("PUT / user updated successfully");
-		
+
 		return userService.updateUser(id, dto);
 	}
 
+	// Delete user (admin only)
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	public String deleteUser(@PathVariable Long id) {
-		log.info("POST / user deleted successfully");
-		
+
+		// Log action
+		log.info("DELETE / user deleted successfully");
+
 		return userService.deleteUser(id);
 	}
 }

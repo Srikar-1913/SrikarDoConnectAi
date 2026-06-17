@@ -1,3 +1,10 @@
+/*
+ * Author: Srikar Akula
+ * Project: DoConnect
+ * Description: Controller for question APIs
+ * Created Date: 17-06-2026
+ */
+
 package com.wipro.doconnect.controller;
 
 import java.util.List;
@@ -12,53 +19,70 @@ import com.wipro.doconnect.service.QuestionService;
 
 import lombok.extern.slf4j.Slf4j;
 
+// REST controller for Question operations
 @RestController
 @RequestMapping("/questions")
 @Slf4j
 public class QuestionController {
 
-	@Autowired
-	private QuestionService questionService;
+    // Service to handle question logic
+    @Autowired
+    private QuestionService questionService;
 
-	@PostMapping("/save")
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-	public Question saveQuestion(@RequestBody QuestionDto questionDto) {
-		log.info("POST / question added successfully");
+    // Create new question
+    @PostMapping("/save")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public Question saveQuestion(@RequestBody QuestionDto questionDto) {
 
-		return questionService.saveQuestion(questionDto);
-	}
+        // Log action
+        log.info("POST / question added successfully");
+
+        return questionService.saveQuestion(questionDto);
+    }
  
-	@GetMapping("/getAll")
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-	public List<Question> getAllQuestions() {
-		log.info("GET / retrived all questions successfully");
+    // Get all questions
+    @GetMapping("/getAll")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public List<Question> getAllQuestions() {
 
-		return questionService.getAllQuestions();
-	}
+        // Log action
+        log.info("GET / retrieved all questions successfully");
 
-	@GetMapping("/get/{questionId}")
-	@PreAuthorize("hasAnyRole('ADMIN')")
-	public Question getQuestionById(@PathVariable Long questionId) {
-		log.info("GET / retrived question by id");
+        return questionService.getAllQuestions();
+    }
 
-		return questionService.getQuestionById(questionId);
-	}
+    // Get question by ID (admin only)
+    @GetMapping("/get/{questionId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public Question getQuestionById(@PathVariable Long questionId) {
 
-	@PutMapping("/update/{questionId}")
-	@PreAuthorize("hasAnyRole('ADMIN')")
-	public Question updateQuestion(@PathVariable Long questionId, @RequestBody QuestionDto questionDto) {
-		log.info("PUT / question updated successfully");
+        // Log action
+        log.info("GET / retrieved question by id");
 
-		return questionService.updateQuestion(questionId, questionDto);
-	}
+        return questionService.getQuestionById(questionId);
+    }
 
-	@DeleteMapping("/delete/{questionId}")
-	@PreAuthorize("hasAnyRole('ADMIN')")
-	public String deleteQuestion(@PathVariable Long questionId) {
-		log.info("DELETE / question deleted successfully");
+    // Update question (admin only)
+    @PutMapping("/update/{questionId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public Question updateQuestion(@PathVariable Long questionId, @RequestBody QuestionDto questionDto) {
 
-		questionService.deleteQuestion(questionId);
+        // Log action
+        log.info("PUT / question updated successfully");
 
-		return "Question Deleted Successfully";
-	}
+        return questionService.updateQuestion(questionId, questionDto);
+    }
+
+    // Delete question (admin only)
+    @DeleteMapping("/delete/{questionId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public String deleteQuestion(@PathVariable Long questionId) {
+
+        // Log action
+        log.info("DELETE / question deleted successfully");
+
+        questionService.deleteQuestion(questionId);
+
+        return "Question Deleted Successfully";
+    }
 }

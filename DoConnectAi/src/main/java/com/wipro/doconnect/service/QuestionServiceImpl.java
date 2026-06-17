@@ -1,3 +1,10 @@
+/*
+ * Author: Srikar Akula
+ * Project: DoConnect
+ * Description: Implementation of Question service
+ * Created Date: 17-06-2026
+ */
+
 package com.wipro.doconnect.service;
 
 import java.time.LocalDateTime;
@@ -22,95 +29,121 @@ import com.wipro.doconnect.repository.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
+// Service implementation for question operations
 @Service
 @Slf4j
 public class QuestionServiceImpl implements QuestionService {
 
-	@Autowired
-	private QuestionRepository questionRepository;
+    // Repository for questions
+    @Autowired
+    private QuestionRepository questionRepository;
 
-	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired 
-	private ImpressionRepository impressionRepository;
-	
-	@Autowired
-	private ChatMessageRepository chatMessageRepository;
-	
-	@Autowired AnswerRepository answerRepository;
+    // Repository for users
+    @Autowired
+    private UserRepository userRepository;
+    
+    // Repository for impressions
+    @Autowired 
+    private ImpressionRepository impressionRepository;
+    
+    // Repository for chat messages
+    @Autowired
+    private ChatMessageRepository chatMessageRepository;
+    
+    // Repository for answers
+    @Autowired
+    private AnswerRepository answerRepository;
 
-	@Override
-	public Question saveQuestion(QuestionDto questionDto) {
+    @Override
+    public Question saveQuestion(QuestionDto questionDto) {
 
-		log.info("Saving question with title: '{}' by userId: {}", questionDto.getTitle());
+        // Log save action
+        log.info("Saving question with title: '{}' by userId: {}", questionDto.getTitle());
 
-		Question question = new Question();
+        Question question = new Question();
 
-		question.setTitle(questionDto.getTitle());
-		question.setDescription(questionDto.getDescription());
-		question.setCreatedAt(LocalDateTime.now());
+        // Set question details
+        question.setTitle(questionDto.getTitle());
+        question.setDescription(questionDto.getDescription());
+        question.setCreatedAt(LocalDateTime.now());
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String email = authentication.getName();
+        // Get logged-in user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
 
-		User loggedInUser = userRepository.findByEmail(email);
+        User loggedInUser = userRepository.findByEmail(email);
 
-		question.setUser(loggedInUser);
+        question.setUser(loggedInUser);
 
-		return questionRepository.save(question);
-	}
+        // Save question
+        return questionRepository.save(question);
+    }
 
-	@Override
-	public List<Question> getAllQuestions() {
-		return questionRepository.findAll();
-	}
+    @Override
+    public List<Question> getAllQuestions() {
 
-	@Override
-	public Question getQuestionById(Long questionId) {
-		return questionRepository.findById(questionId)
-				.orElseThrow(() -> new QuestionNotFoundException("Question not found with id: " + questionId));
-	}
+        // Get all questions
+        return questionRepository.findAll();
+    }
 
-	@Override
-	public Question updateQuestion(Long questionId, QuestionDto questionDto) {
-		log.info("Updating question with id: {}", questionId);
+    @Override
+    public Question getQuestionById(Long questionId) {
 
-		Question question = questionRepository.findById(questionId)
-				.orElseThrow(() -> new QuestionNotFoundException("Question not found with id: " + questionId));
+        // Get question by ID or throw exception
+        return questionRepository.findById(questionId)
+                .orElseThrow(() -> new QuestionNotFoundException("Question not found with id: " + questionId));
+    }
 
-		question.setTitle(questionDto.getTitle());
-		question.setDescription(questionDto.getDescription());
+    @Override
+    public Question updateQuestion(Long questionId, QuestionDto questionDto) {
 
-		// update user also (important improvement)
-		if (questionDto.getUserId() != null) {
-			User user = userRepository.findById(questionDto.getUserId())
-					.orElseThrow(() -> new UserNotFoundException("User not found with id: " + questionDto.getUserId()));
+        // Log update action
+        log.info("Updating question with id: {}", questionId);
 
-			question.setUser(user);
-		}
+        // Get existing question
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new QuestionNotFoundException("Question not found with id: " + questionId));
 
-		return questionRepository.save(question);
-	}
+        // Update details
+        question.setTitle(questionDto.getTitle());
+        question.setDescription(questionDto.getDescription());
 
-	@Override
-	public void deleteQuestion(Long questionId) {
-		log.info("Deleting question with id: {}", questionId);
+        // Update user if provided
+        if (questionDto.getUserId() != null) {
+            User user = userRepository.findById(questionDto.getUserId())
+                    .orElseThrow(() -> new UserNotFoundException("User not found with id: " + questionDto.getUserId()));
 
-		Question question = questionRepository.findById(questionId)
-				.orElseThrow(() -> new QuestionNotFoundException("Question not found with id: " + questionId));
+            question.setUser(user);
+        }
 
-		List<Answer> answers = answerRepository.findByQuestion(question);
+        // Save updated question
+        return questionRepository.save(question);
+    }
 
-		for (Answer answer : answers) {
+    @Override
+    public void deleteQuestion(Long questionId) {
 
-			impressionRepository.deleteByAnswer(answer);
+        // Log delete action
+        log.info("Deleting question with id: {}", questionId);
 
-			chatMessageRepository.deleteByAnswer(answer);
+        // Get question by ID
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new QuestionNotFoundException("Question not found with id: " + questionId));
 
-			answerRepository.delete(answer);
-		}
+        // Get related answers
+        List<Answer> answers = answerRepository.findByQuestion(question);
 
-		questionRepository.delete(question);
-	}
+        // Delete related data
+        for (Answer answer : answers) {
+
+            impressionRepository.deleteByAnswer(answer);
+
+            chatMessageRepository.deleteByAnswer(answer);
+
+            answerRepository.delete(answer);
+        }
+
+        // Delete question
+        questionRepository.delete(question);
+    }
 }

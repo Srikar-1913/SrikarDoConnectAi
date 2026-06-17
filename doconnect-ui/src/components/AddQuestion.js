@@ -3,16 +3,20 @@ import API from "../services/api";
 import { useNavigate } from "react-router-dom";
 import "../styles/addQuestion.css";
 
+// Component to add a new question
 export default function AddQuestion() {
 
+  // Hook for navigation
   const navigate = useNavigate();
 
+  // State to store question details
   const [question, setQuestion] = useState({
     title: "",
     description: "",
     category: "General"
   });
 
+  // Handle input changes
   const handleChange = (e) => {
     setQuestion({
       ...question,
@@ -20,26 +24,34 @@ export default function AddQuestion() {
     });
   };
 
+  // Submit question to backend
   const handleSubmit = async () => {
     try {
 
+      // Validate description length
       if (question.description.length < 10) {
         alert("Description must contain at least 10 characters");
         return;
       }
 
+      // Get user ID (optional if handled by backend)
       const userId = localStorage.getItem("userId");
 
+      // Call API to save question
       await API.post("/questions/save", {
         title: question.title,
         description: question.description
       });
 
-
+      // Success message
       alert("Question added successfully");
+
+      // Redirect to questions page
       navigate("/questions");
 
     } catch (err) {
+
+      // Error handling
       alert("Failed to add question");
     }
   };
@@ -47,13 +59,17 @@ export default function AddQuestion() {
   return (
     <div className="aq-container">
 
+      {/* Page title */}
       <h3 className="aq-title">Ask a New Question</h3>
+
+      {/* Subtitle */}
       <p className="aq-subtitle">
         Share your question and get answers from the community
       </p>
 
       <div className="aq-card">
 
+        {/* Title and category input */}
         <div className="aq-row">
 
           <input
@@ -77,6 +93,7 @@ export default function AddQuestion() {
 
         </div>
 
+        {/* Description input */}
         <textarea
           name="description"
           rows="5"
@@ -86,8 +103,10 @@ export default function AddQuestion() {
           className="aq-textarea"
         />
 
+        {/* Action buttons */}
         <div className="aq-actions">
 
+          {/* Cancel and go back */}
           <button
             onClick={() => navigate("/questions")}
             className="aq-cancel"
@@ -95,6 +114,7 @@ export default function AddQuestion() {
             Cancel
           </button>
 
+          {/* Submit question */}
           <button
             onClick={handleSubmit}
             className="aq-submit"

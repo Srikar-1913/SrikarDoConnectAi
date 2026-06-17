@@ -1,33 +1,34 @@
+/* MAIN PROFILE PAGE */
 .profile-page {
-  padding: 20px;
-  background: #f7f8fc;
+  padding: 20px;             /* space around page */
+  background: #f7f8fc;       /* light background */
 }
 
-/* Header */
+/* HEADER */
 .profile-header h3 {
-  font-weight: 600;
+  font-weight: 600;          /* bold heading */
 }
 
 .profile-header p {
-  color: gray;
+  color: gray;               /* subtitle color */
 }
 
-/* Card */
+/* PROFILE CARD */
 .profile-card {
-  display: flex;
+  display: flex;             /* horizontal layout */
   align-items: center;
   background: white;
   padding: 20px;
-  border-radius: 15px;
+  border-radius: 15px;       /* rounded corners */
   margin-top: 15px;
   justify-content: space-between;
 }
 
-/* Avatar */
+/* AVATAR */
 .profile-avatar {
   width: 80px;
   height: 80px;
-  border-radius: 50%;
+  border-radius: 50%;        /* circular avatar */
   background: linear-gradient(135deg, #7b5cff, #5a9cff);
   color: white;
   display: flex;
@@ -36,12 +37,13 @@
   font-size: 30px;
 }
 
-/* Info */
+/* USER INFO SECTION */
 .profile-info {
-  flex: 1;
+  flex: 1;                   /* take remaining space */
   margin-left: 20px;
 }
 
+/* ROLE BADGE */
 .role-badge {
   background: #e0d4ff;
   color: #6c63ff;
@@ -51,7 +53,7 @@
   font-size: 12px;
 }
 
-/* Button */
+/* EDIT BUTTON */
 .edit-btn {
   border: none;
   background: #6c63ff;
@@ -60,14 +62,15 @@
   border-radius: 8px;
 }
 
-/* Stats */
+/* STATS GRID */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
   gap: 15px;
   margin-top: 20px;
 }
 
+/* EACH STAT BOX */
 .stat {
   background: white;
   padding: 15px;
@@ -75,20 +78,22 @@
   text-align: center;
 }
 
-/* Content */
+/* CONTENT SECTION */
 .profile-content {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 2fr 1fr; /* activity + about */
   gap: 15px;
   margin-top: 20px;
 }
 
+/* ACTIVITY + ABOUT BOX */
 .activity, .about {
   background: white;
   padding: 15px;
   border-radius: 10px;
 }
 
+/* ACTIVITY LIST */
 .activity ul {
   padding-left: 15px;
 }

@@ -1,3 +1,10 @@
+/*
+ * Author: Srikar Akula
+ * Project: DoConnect
+ * Description: Controller for Answer APIs
+ * Created Date: 17-06-2026
+ */
+
 package com.wipro.doconnect.controller;
 
 import java.util.List;
@@ -19,53 +26,70 @@ import com.wipro.doconnect.service.AnswerService;
 
 import lombok.extern.slf4j.Slf4j;
 
+// REST controller for Answer operations
 @RestController
 @RequestMapping("/answers")
 @Slf4j
 public class AnswerController {
 
-	@Autowired
-	private AnswerService answerService;
+    // Service to handle answer logic
+    @Autowired
+    private AnswerService answerService;
 
-	@PostMapping("/save")
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-	public Answer saveAnswer(@RequestBody AnswerDto answerDto) {
-		log.info("POST / answer added successfully");
+    // Create new answer
+    @PostMapping("/save")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public Answer saveAnswer(@RequestBody AnswerDto answerDto) {
 
-		return answerService.saveAnswer(answerDto);
-	}
+        // Log action
+        log.info("POST / answer added successfully");
 
-	@GetMapping("/getAll")
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-	public List<Answer> getAllAnswers() {
-		log.info("GET / retrived all answers successfully");
+        return answerService.saveAnswer(answerDto);
+    }
 
-		return answerService.getAllAnswers();
-	}
+    // Get all answers
+    @GetMapping("/getAll")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public List<Answer> getAllAnswers() {
 
-	@GetMapping("/get/{answerId}")
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-	public Answer getAnswerById(@PathVariable Long answerId) {
-		log.info("GET / retrived answer by id");
+        // Log action
+        log.info("GET / retrieved all answers successfully");
 
-		return answerService.getAnswerById(answerId);
-	}
+        return answerService.getAllAnswers();
+    }
 
-	@PutMapping("/update/{answerId}")
-	@PreAuthorize("hasAnyRole('ADMIN')")
-	public Answer updateAnswer(@PathVariable Long answerId, @RequestBody AnswerDto answerDto) {
-		log.info("PUT / answer updated successfully");
+    // Get answer by ID
+    @GetMapping("/get/{answerId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public Answer getAnswerById(@PathVariable Long answerId) {
 
-		return answerService.updateAnswer(answerId, answerDto);
-	}
+        // Log action
+        log.info("GET / retrieved answer by id");
 
-	@DeleteMapping("/delete/{answerId}")
-	@PreAuthorize("hasAnyRole('ADMIN')")
-	public String deleteAnswer(@PathVariable Long answerId) {
-		log.info("DELETE / answer deleted successfully");
+        return answerService.getAnswerById(answerId);
+    }
 
-		answerService.deleteAnswer(answerId);
+    // Update answer (admin only)
+    @PutMapping("/update/{answerId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public Answer updateAnswer(@PathVariable Long answerId, @RequestBody AnswerDto answerDto) {
 
-		return "Answer Deleted Successfully";
-	}
+        // Log action
+        log.info("PUT / answer updated successfully");
+
+        return answerService.updateAnswer(answerId, answerDto);
+    }
+
+    // Delete answer (admin only)
+    @DeleteMapping("/delete/{answerId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public String deleteAnswer(@PathVariable Long answerId) {
+
+        // Log action
+        log.info("DELETE / answer deleted successfully");
+
+        answerService.deleteAnswer(answerId);
+
+        return "Answer Deleted Successfully";
+    }
 }
