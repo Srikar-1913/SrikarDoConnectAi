@@ -1,0 +1,171 @@
+/* MAIN LAYOUT */
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  background: #f5f7fb;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 240px;
+  background: linear-gradient(180deg, #0f172a, #1e293b);
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+/* MENU ITEMS */
+.menu-item {
+  background: transparent;
+  border: none;
+  color: #cbd5e1;
+  text-align: left;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.menu-item.active {
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  color: white;
+  font-weight: 500;
+}
+
+/* LOGOUT */
+.logout-btn {
+  margin-top: auto;
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+  border: none;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.logout-btn:hover {
+  opacity: 0.9;
+}
+
+/* MAIN CONTENT */
+.main-content {
+  flex: 1;
+  padding: 25px 30px;
+}
+
+/* TOP BAR */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topbar h3 {
+  margin: 0;
+  font-weight: bold;
+}
+
+.topbar p {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* SEARCH */
+.search-bar {
+  padding: 10px 15px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  width: 260px;
+  background: #f1f5f9;
+  outline: none;
+  transition: 0.2s;
+}
+
+.search-bar:focus {
+  border-color: #6366f1;
+}
+
+/* STATS GRID */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* STATS CARD */
+.stat-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+}
+
+.stat-card p {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.stat-card h3 {
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.content-section {
+  margin-top: 25px;
+}
+
+/* OPTIONAL PREMIUM TOUCHES */
+.question-card {
+  border-radius: 16px;
+  background: #ffffff;
+  padding: 20px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.04);
+  transition: all 0.2s ease;
+}
+
+.question-card:hover {
+  transform: translateY(-4px);
+}
+
+/* BADGE STYLE */
+.badge {
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+/* SCROLLBAR MODERN */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
